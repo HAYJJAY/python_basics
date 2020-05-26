@@ -1,0 +1,22 @@
+# 쥬피터 노트북 내에서 사용한 Packages명과 버전을 알려주는 코딩
+
+import pkg_resources
+from IPython.display import display
+import pandas as pd
+
+root_packages = [
+    'geoviews', 'geopandas', 'pandas', 'numpy', 'cloudpickle',
+    'matplotlib', 'shapely', 'cartopy', 'holoviews',
+    'mapclassify', 'fiona', 'bokeh', 'pyproj', 'ipython',
+    'jupyterlab']
+root_packages.sort(reverse=True)
+root_packages_list = []
+
+for m in pkg_resources.working_set:
+    if m.project_name.lower() in root_packages:
+        root_packages_list.append([m.project_name, m.version])
+
+display(pd.DataFrame(
+            root_packages_list,
+            columns=["package", "version"]
+        ).set_index("package").transpose())
