@@ -23,5 +23,15 @@ from google.colab import drive
 drive.mount('/content/gdrive/')    
 
 
+# 읽어올 파일이 csv or excel인 경우,
+
 import pandas as pd
 df = pd.read_excel("./gdrive/My Drive/realestate/seoul_sale_1.xlsx")
+
+# 읽어올 파일이 txt인 경우
+
+with open('/content/gdrive/My Drive/폴더명/pi_digits.txt') as file_object:
+    contents = file_object.read()
+    print(contents)
+
+
