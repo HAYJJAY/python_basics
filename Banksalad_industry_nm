@@ -1,10 +1,13 @@
-url = https://banksalad.com/cards/questions
+import requests
+from bs4 import BeautifulSoup
+
+url = 'https://banksalad.com/cards/questions'
+resp = requests.get(url)
+soup = Beautifulsoup(resp)
+soup
 
 # title_tag,   <h5 class="groupTitle_8Xfpg">대중교통</h5>
+title_tag = select('h5[class="groupTitle_8Xfpg"]')
 
-# ind_nm,    <span class="name_2H_ss">지하철</span>
-
-title_tag = select.one(h5, class="groupTitle_8Xfpg")
-
-ind_nm = select(span, class="name_2H_ss")
-ind_nm.get_value()
+# ind_nm 가져오기    
+ind_nm = select(span.'name_2H_ss')
