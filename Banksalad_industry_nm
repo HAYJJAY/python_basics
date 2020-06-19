@@ -1,13 +1,35 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 url = 'https://banksalad.com/cards/questions'
 resp = requests.get(url)
-soup = Beautifulsoup(resp)
+soup = BeautifulSoup(resp.text)
 soup
+
 
 # title_tag,   <h5 class="groupTitle_8Xfpg">대중교통</h5>
 title_tag = select('h5[class="groupTitle_8Xfpg"]')
 
 # ind_nm 가져오기    
 ind_nm = select(span.'name_2H_ss')
+
+
+
+----------------------------2020-06-19---------------------------------------
+
+import requests
+from bs4 import BeautifulSoup
+
+
+url = 'https://api-gateway.banksalad.com/api/v3/stores/items/73?limit=100&offset=0'
+
+list= ''
+resp = requests.get(url)
+data = resp.json()
+
+for i in range(0,84):
+  result  = data['stores'][i]['name']
+  list += result+","
+
+list
