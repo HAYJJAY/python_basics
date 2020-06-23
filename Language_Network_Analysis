@@ -1,0 +1,41 @@
+# 기업 신뢰도 측정을 하기 위해선, 기존에는 설문조사 OR FGI(Focus Group Interview)를 통해 '의견텍스트'를 수집 후,
+   이를 문서화해서 응답의 '출현빈도' 에 따라 분석을 하였다. 따라서 객관적이고 체계적이긴 하나, 의미와 맥락을 해석하기 어렵다는 단점도 존재.
+
+# 여러 사람들이 하나의 대상에 대해 공통적으로 반복해서 사용하는 단어 간의 연결구조를 살펴보면 대상에 대한 어떤 인식을 가지는지 알 수 있다.
+
+
+# 순서 : 
+  1) 데이터 수집 - 2) 데이터 전처리(토큰나이즈, stopwords, stem/lemi, 형태소분석기) - 3) 단어 형태별 출현빈도 분석 
+     - 4) 데이터 분석 (출현빈도에 따라 추출된 단어군을 대상으로 상호 관계성 측정) -  5) 시각화
+    
+    데이터 분석 단계의 핵심 : 단어 간 연결성이 강한 단어를 찾아내는 것.
+                            (특히, 많은 단어와 빈번하게 연결되는 "핵심단어" & 특정 단어들을 서로 연결하는 "매개단어(연관단어)")
+                            
+# python library : NetworkX
+  자동설치 :  pip install networkx or sudo apt-get install python-networkx
+   ex) import networkx as nx
+       import matplotlib.pyplot as plt
+       G = nx.Graph()   # 빈 그래프 구조 G 생성
+       G.add_edge(1,2)  # 엣지 추가
+       nx.draw(G)       # 그래프 G 그리기
+       plt.show()       # pyplot으로 보여주기
+       
+  # 노드 정의하는 방법
+  G = nx.Graph()
+  G.add_node('apple')                             # 노드 'apple'추가
+  G.add_nodes_from(['banana', 'kiwi', 'mango'])   # 리스트로 추가 1
+ # or 
+  fruits= ['banana', 'kiwi', 'mango']
+  G.add_nodes_from(fruits)                        # 리스트로 추가 2
+  
+  G.nodes()                                       # 노드들 보기
+  
+  # 엣지 정의하는 방법
+  G = nx.Graph()
+  G.add_edge('apple', 'banana')                   # 노드 'apple'추가
+  G.add_edges_from([('apple','banana'), ('apple', 'kiwi')])   # 리스트로 추가 1
+ # or 
+  fruits= ['banana', 'kiwi', 'mango']
+  G.add_nodes_from(fruits)                        # 리스트로 추가 2
+  
+  G.nodes()                                       # 노드들 보기
