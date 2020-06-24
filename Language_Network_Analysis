@@ -22,7 +22,7 @@
        
 
 # 노드 정의하는 방법
-G = nx.Graph()
+G = nx.Graph()                                  # to create a new network
 G.add_node('apple')                             # 노드 'apple'추가
  
  G.add_nodes_from(['banana', 'kiwi', 'mango'])   # 리스트로 추가 1
@@ -84,8 +84,9 @@ G['apple']['kiwi']['weight']=2
 
 
 #네트워크가 정의되기 위해선?
-   # 점(objects, vertices, Nodes, Sites, Actors..) / 선(Relations, Edges, Lnks, Bonds, Ties..() 
-   #  점, 선 + 점의 위치
+   # - 점(objects, vertices, Nodes, Sites, Actors..) / 선(Relations, Edges, Lnks, Bonds, Ties..() 
+   # - 점, 선 + 점의 위치
+   
    
 # 네트워크 그리기
 G = nx.Graph()
@@ -93,3 +94,44 @@ relations = relations = [('apple','mango'), ('apple', 'kiwi'), ('apple', 'banana
 G.add_edges_from(relations)       # 점, 선 생성
 nx.draw(G)                        # 점의 위치를 spring layout으로 생성
 plt.show()
+
+
+------------------여기서 부터는 DATACAMP 내 SNA 참고함---------------------------
+
+# 네트워크 그리기 2 (여러종류로 그리기)  & Symmetric Networks(in 데이터캠프) 
+  # : symmetric Networks means that If A is related to B, B is also related to A.
+  
+G1 = nx.Graph()                                     
+G1.add_edge('Amitabh Bachchan','Abhishek Bachchan')
+G1.add_edge('Amitabh Bachchan','Aamir Khan')
+G1.add_edge('Amitabh Bachchan','Akshay Kumar')
+G1.add_edge('Amitabh Bachchan','Dev Anand')
+G1.add_edge('Abhishek Bachchan','Aamir Khan')
+G1.add_edge('Abhishek Bachchan','Akshay Kumar')
+G1.add_edge('Abhishek Bachchan','Dev Anand')
+G1.add_edge('Dev Anand','Aamir Khan')
+
+nx.draw(G1)              # 기본 그리기
+nx.draw_networkx(G1)     # 노드명 표시된 기본 그리기
+nx.draw_circular(G1)     # 원 위에 노드 놓기
+nx.draw_graphviz(G1)     # graphviz 사용
+nx.draw_random(G1)       # 균등 분포를 이용한 랜덤
+nx.draw_shell(G1)        # 동심원 위에 노드 놓기
+nx.draw_spectral(G1)     # 그래프 라플라시안의 고유 벡터 기반
+nx.draw_spring(G1)       # Fruchterman-Reingold force-directed alg. 기반
+
+
+# Asymmetric Networks
+ # : A is related to B, does not necessarily means that B is associated with A
+ 
+G_asymmetric = nx.DiGraph()           # 비대칭 구조의 경우, nx.DiGraph()를 사용해야 함
+G_asymmetric.add_edge('A','B')
+G_asymmetric.add_edge('A','D')
+G_asymmetric.add_edge('C','A')
+G_asymmetric.add_edge('D','E')
+
+nx.draw_networkx(G_asymmetric)        # 시각화 1,  기본 방법
+
+nx.spring_layout(G_asymmetric)        # 시각화 2,  노드가 막 뻗치지 않고, 각 노드별 거리가 동일하게끔 만든 
+nx.draw_networkx(G_asymmetric)
+
