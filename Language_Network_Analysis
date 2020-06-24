@@ -88,7 +88,7 @@ G['apple']['kiwi']['weight']=2
    # - 점, 선 + 점의 위치
    
    
-# 네트워크 그리기
+# 네트워크 그리기_1
 G = nx.Graph()
 relations = relations = [('apple','mango'), ('apple', 'kiwi'), ('apple', 'banana')]
 G.add_edges_from(relations)       # 점, 선 생성
@@ -96,21 +96,7 @@ nx.draw(G)                        # 점의 위치를 spring layout으로 생성
 plt.show()
 
 
-------------------여기서 부터는 DATACAMP 내 SNA 참고함---------------------------
-
-# 네트워크 그리기 2 (여러종류로 그리기)  & Symmetric Networks(in 데이터캠프) 
-  # : symmetric Networks means that If A is related to B, B is also related to A.
-  
-G1 = nx.Graph()                                     
-G1.add_edge('Amitabh Bachchan','Abhishek Bachchan')
-G1.add_edge('Amitabh Bachchan','Aamir Khan')
-G1.add_edge('Amitabh Bachchan','Akshay Kumar')
-G1.add_edge('Amitabh Bachchan','Dev Anand')
-G1.add_edge('Abhishek Bachchan','Aamir Khan')
-G1.add_edge('Abhishek Bachchan','Akshay Kumar')
-G1.add_edge('Abhishek Bachchan','Dev Anand')
-G1.add_edge('Dev Anand','Aamir Khan')
-
+# 네트워크 그리기_2 
 nx.draw(G1)              # 기본 그리기
 nx.draw_networkx(G1)     # 노드명 표시된 기본 그리기
 nx.draw_circular(G1)     # 원 위에 노드 놓기
@@ -121,8 +107,74 @@ nx.draw_spectral(G1)     # 그래프 라플라시안의 고유 벡터 기반
 nx.draw_spring(G1)       # Fruchterman-Reingold force-directed alg. 기반
 
 
-# Asymmetric Networks
- # : A is related to B, does not necessarily means that B is associated with A
+------------------여기서 부터는 DATACAMP 내 SNA 참고함---------------------------
+
+1 Social Network Analysis with NetworkX in Python
+   1.1 Social Network Basics
+      1.1.1 Symmetric Networks (undirected)
+      1.1.2 Asymmetric Networks (directed)
+      1.1.3 Weighted Networks
+   1.2 Clustering coefficient
+   1.3 Network Distance Measures
+      1.3.1 Degree
+      1.3.2 Distance
+      1.3.3 Breadth-first search
+      1.3.4 Eccentricity
+   1.4 Centrality measures
+      1.4.1 Degree Centrality
+      1.4.2 Eigenvector Centrality
+      1.4.3 Closeness Centrality
+      1.4.4 Betweenness Centrality
+   1.5 Facebook Case Study
+   
+--------------------------------------------------------------------------
+
+# What is Nodes?
+   : The individuals whose network we are building. Actors in the above example.
+
+# What is Edges?
+   : The connection between the nodes. It represents a relationship between the nodes of the network. In our example, the relationship was that the actors have worked together.
+
+
+---------------------------# Symmetric Networks-------------------------------
+ : symmetric Networks means that If A is related to B, B is also related to A.
+  
+import networkx as nx
+G_symmetric = nx.Graph()
+G_symmetric.add_edge('Amitabh Bachchan','Abhishek Bachchan')
+G_symmetric.add_edge('Amitabh Bachchan','Aamir Khan')
+G_symmetric.add_edge('Amitabh Bachchan','Akshay Kumar')
+G_symmetric.add_edge('Amitabh Bachchan','Dev Anand')
+G_symmetric.add_edge('Abhishek Bachchan','Aamir Khan')
+G_symmetric.add_edge('Abhishek Bachchan','Akshay Kumar')
+G_symmetric.add_edge('Abhishek Bachchan','Dev Anand')
+G_symmetric.add_edge('Dev Anand','Aamir Khan')
+
+nx.draw_networkx(G_symmetric)
+
+--------------------------- nx.Graph() vs nx.DiGraph()의 차이 -------------------------------
+: nx.Graph()는 ('apple', 'mango')과 ('mango', 'apple')를 "동일한 것"으로 봄
+  반면, nx.DiGraph()는 이 두 개를 다르게 봄
+
+G = nx.Graph() 
+
+G.add_edge(0, 1, weight=3, aaa=10)
+print(G.edges(data=True))
+
+print("--"*20)
+# 이미 동일한 edge인 (0, 1)이 있는 상황에서, 
+# 새로운 edge를 업데이트하게 되면, 원래 edge의 attribute_dict가 업데이트되는 식으로 진행됨.
+
+G.add_edge(1, 0, weight=2)
+print(G.edges(data=True))
+
+>>> [(0, 1, {'weight': 3, 'aaa': 10})]         # (0,1)로 엣지를 넣었고, weight에 3을 줌
+----------------------------------------
+>>> [(0, 1, {'weight': 2, 'aaa': 10})]         # (1,0)으로 넣었지만, (0,1)로 나옴. 즉, 위에 edge와 두 개는 동일하기 때문에 weight값만 변경되고 위에서 입력한 aaa값도 나옴.
+  
+
+------------------# Asymmetric Networks------------------
+ : A is related to B, does not necessarily means that B is associated with A
  
 G_asymmetric = nx.DiGraph()           # 비대칭 구조의 경우, nx.DiGraph()를 사용해야 함
 G_asymmetric.add_edge('A','B')
@@ -134,4 +186,98 @@ nx.draw_networkx(G_asymmetric)        # 시각화 1,  기본 방법
 
 nx.spring_layout(G_asymmetric)        # 시각화 2,  노드가 막 뻗치지 않고, 각 노드별 거리가 동일하게끔 만든 
 nx.draw_networkx(G_asymmetric)
+
+
+--------------------# Weighted Networks---------------------------
+ :  가중치 변수를 추가하기
+ :  node = actors / edge =  works together / weight = # of moives done together
+ 
+import matplotlib.pyplot as plt
+import networkx as nx
+
+G_weighted = nx.Graph()
+G_weighted.add_edge('Amitabh Bachchan','Abhishek Bachchan', weight=25)
+G_weighted.add_edge('Amitabh Bachchan','Aaamir Khan', weight=8)
+G_weighted.add_edge('Amitabh Bachchan','Akshay Kumar', weight=11)
+G_weighted.add_edge('Amitabh Bachchan','Dev Anand', weight=1)
+G_weighted.add_edge('Abhishek Bachchan','Aaamir Khan', weight=4)
+G_weighted.add_edge('Abhishek Bachchan','Akshay Kumar',weight=7)
+G_weighted.add_edge('Abhishek Bachchan','Dev Anand', weight=1)
+G_weighted.add_edge('Dev Anand','Aaamir Khan',weight=1)
+
+elarge = [(u, v) for (u, v, d) in G_weighted.edges(data=True) if d["weight"] > 0.5]       # 위에 세개 속성을 (u,v,d)로 바꾼거고, 거기서 d를 조건문으로 (u,v)를 뽑는 코딩
+esmall = [(u, v) for (u, v, d) in G_weighted.edges(data=True) if d["weight"] <= 0.5]
+
+pos = nx.spring_layout(G_weighted)      # positions for all nodes
+
+# nodes
+nx.draw_networkx_nodes(G_weighted, pos, node_size=700)
+
+# edges
+nx.draw_networkx_edges(G_weighted, pos, edgelist=elarge, width=6)
+nx.draw_networkx_edges(G_weighted, pos, edgelist=esmall, width=6, alpha=0.5, edge_color="b", style="dashed")
+
+# labels
+nx.draw_networkx_labels(G_weighted, pos, font_size=20, font_family="sans-serif")
+
+plt.axis("off")
+plt.show()
+
+
+------------------# Multigraph-------------------------
+: nx.MultiGraph()는 동시에 여러 edge를 동시에 표현할 수 있기 때문에, 이미 있는 상태에서 새로운 edge를 넣어주면 독립적인 edge를 넣는다고 생각하고, 새로운 edge를 넣어줍니다.
+그리고, 방향성이 없으므로 (0, 1), (1, 0)을 넣어주나, (0, 1), (0, 1)을 넣어주나 차이가 없습니다. (즉, nx.Graph()처럼 방향성이 없음)
+
+## MultiGraph.add_edge----------------
+
+import networkx as nx 
+
+MG = nx.MultiGraph()
+MG.add_edges_from([
+    (0, 1, {'type':'car'}), (1, 0, {'type':'bus'})
+])
+
+print("== MG.edges() =====")
+for e in MG.edges(data=True):
+    print(e)
+print("=="*20)
+
+== MG.edges() =====
+(0, 1, {'type': 'car'})
+(0, 1, {'type': 'bus'})
+
+ 
+## MultiGraph.remove_edge-----------------------
+# 목표 : 앞서 만든 edge들 중에서 ‘bus’ edge없애기
+         MG의 edge를 읽기 위해서 MG.edges(data=True, keys=True)를 사용함. keys는 복수의 edge들을 관리할 때, edge을 구별해주는 key
+         즉, (u, v, k)이 세 조합을 합치면, 무조건 어떤 edge에 대해서도 uniqueness 가 보장
+           
+for u, v, k, e_attr in MG.edges(data=True, keys=True):
+    print(f"u: {u}, v: {v}, k: {k}, e_attr: {e_attr}")
+    
+== MG.edges(data=True) =====
+u: 0, v: 1, k: 0, e_attr: {'type': 'car'}
+u: 0, v: 1, k: 1, e_attr: {'type': 'bus'}
+
+edge를 추가할 때는 k에 대해서 알아서 하나씩 값을 올라가며 넣어줌
+하지만, 제거할 때는 u, v, k를 모두 넣어줘야 합니다. 다음처럼 지워주면 정상적으로 edge가 잘 지워진 것을 알 수 있습니다.
+
+MG.remove_edges_from([(0, 1, 1)])
+print("== MG.edges(data=True) =====")
+
+for u, v, k, e_attr in MG.edges(data=True, keys=True):
+    print(f"u: {u}, v: {v}, k: {k}, e_attr: {e_attr}")
+    
+== MG.edges(data=True) =====
+u: 0, v: 1, k: 0, e_attr: {'type': 'car'}
+
+## wrap-up ----------------------------
+# - 다시 정리하자면, nx.MultiGraph()의 경우 복수의 edge를 동시에 관리해야 하므로, edge들에 대해서도 key값을 줘야 한다.
+# - 넣을때는 보통 0부터 시작해서 가장 큰 key값에서 하나씩 추가하는 식으로 값을 늘려나가기 때문에, 정의해줄 필요가 없지만,
+# - 뺄 때는 정확한 key값을 정의해서 넘겨주는 것이 필요하다. 만약 그렇게 하지 않을 경우, 랜덤 edge가 지워지게 될 수도 있음.
+
+
+-------------------------------# ------------------------------------
+
+
 
