@@ -300,4 +300,7 @@ nx.shortest_path(G_symmetric, 'Michelle', 'John')
 >>> ['Michelle', 'Steven', 'John'] 
 nx.shortest_path_length(G_symmetric, 'Michelle', 'John')
 >>> 2 
-   
+
+
+# 1.3.3 Breadth-first search
+
