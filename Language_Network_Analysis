@@ -284,6 +284,7 @@ u: 0, v: 1, k: 0, e_attr: {'type': 'car'}
 
 ㅈㅏ세한 개념 설명은 https://blog.naver.com/sw4r/221323907015 참조하기
 
+
 ------------------------------# 1.3 Network Distance Measures--------------------------
 # 1.3.1 Degree
 : Degree of a node defines the number of connections a node has.
@@ -294,7 +295,7 @@ nx.degree(G_symmetric, 'Michelle')
 
 # 1.3.2 Distance
  : We can also determine the shortest path between two nodes and its length in NetworkX using "nx.shortest_path(Graph, Node1, Node2)"
-    and "nx.shortest_path_length(Graph, Node1, Node2)" functions respectively.  (즉,A노드와 B노드 까지 가는 경우의 수가 아니라 두 노드 간의 연결된 Edges의 수를 뜻함)
+    and "nx.shortest_path_length(Graph, Node1, Node2)" functions respectively.  (즉,A노드와 B노드 까지 가는 경우의 수가 아니라 두 노드 간의 연결된 Edges의 최소 개수를 뜻함)
    
 nx.shortest_path(G_symmetric, 'Michelle', 'John')
 >>> ['Michelle', 'Steven', 'John'] 
@@ -303,4 +304,71 @@ nx.shortest_path_length(G_symmetric, 'Michelle', 'John')
 
 
 # 1.3.3 Breadth-first search
+: 특정 노드를 기준으로 다른 노드까지의 거리가 어떻게 되는지를 살펴보는 방법.
+: nx.bfs_tree()함수를 이용해 기준 노드를 변경하면서 볼 수 있음. (그림으로 보면 바로 이해됨)
 
+S = nx.bfs_tree(G_symmetric, 'Steven')
+nx.draw_networkx(S)
+
+M = nx.bfs_tree(G_symmetric, 'Michelle')
+nx.draw_networkx(M)
+
+
+# 1.3.4 Eccentricity`
+특정 노드의 최장 거리(다른 노드와의 거리 중, 가장 긴 거리가 몇인지 명시해줌)를 알려주는 함수임
+It can be found using nx.eccentricity() function. 
+In the symmetric employee-network, Michelle has an eccentricity of 2, and Steven has an eccentricity of 1 (he is connected to every other node).
+
+nx.eccentricity(G_symmetric,'Michelle')
+>>> 2
+nx.eccentricity(G_symmetric,'Steven')
+>>> 1
+
+
+-------------------------------# 1.4 Centrality measures------------------------------------------
+: In this section, we will learn how to find the most important nodes (individuals) in the network.
+   These parameters are called as 'centrality measures'.
+   Centrality Measures can help us in identifying "popularity", "most liked", and "biggest influencers" within the network.
+
+# 1.4.1 Degree Centrality
+The people "most popular" or "more liked" usually are the ones who have more friends.
+Degree centrality is a measure of "the number of connections a particular node has" in the network. 
+
+nx.degree_centrality(G_symmetric)       # 결국,   모든 노드와 연결된 Steven이 1이 나오는 걸로 봤을 때,  공식 = "자기 노드에 연결된 엣지 갯수 / 총 엣지 갯수"
+>>>
+{'Steven': 1.0,
+ 'Laura': 0.4,
+ 'Marc': 0.4,
+ 'John': 0.4,
+ 'Michelle': 0.6000000000000001,
+ 'George': 0.4}
+ 
+ 
+# 1.4.2 Eigenvector Centrality
+ : degree 처럼 몇 명과 연결되어 있냐는 (수적인 기준이 아닌) "중요한 노드와 연결이 되어있냐"(질적 기준) 으로 보는 것.
+   Eigenvector centrality is a measure of how import a node is by accounting for the fact of how well it is connected to other important nodes.
+
+nx.eigenvector_centrality(G_symmetric)
+>>>
+{'George': 0.30844592433424667,
+ 'John': 0.30844592433424667,
+ 'Laura': 0.3545677660798074,
+ 'Marc': 0.3545677660798074,
+ 'Michelle': 0.4443904166426225,
+ 'Steven': 0.6006686104947806}
+ 
+ # 1.4.3 Closeness Centrality
+ : Closeness Centrality is a measure where each node’s importance is determined by closeness to all other nodes.
+ 
+ nx.closeness_centrality(G_symmetric)
+ >>>
+ {'Steven': 1.0,
+ 'Laura': 0.625,
+ 'Marc': 0.625,
+ 'John': 0.625,
+ 'Michelle': 0.7142857142857143,
+ 'George': 0.625}
+ 
+ 
+ # 1.4.4 Betweenness Centrality
+ 
