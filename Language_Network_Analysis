@@ -371,4 +371,28 @@ nx.eigenvector_centrality(G_symmetric)
  
  
  # 1.4.4 Betweenness Centrality
- 
+ : It represents the frequency at which a point occurs on the shortest paths that connected pair of points.
+   The nodes with high betweenness centrality can have a strategic control and influence on others.
+   
+ nx.betweenness_centrality(G_symmetric)
+ >>>
+ {'Steven': 0.65,
+ 'Laura': 0.0,
+ 'Marc': 0.0,
+ 'John': 0.0,
+ 'Michelle': 0.05,
+ 'George': 0.0}
+
+pos = nx.spring_layout(G_symmetric)
+betCent = nx.betweenness_centrality(G_symmetric, normalized=True, endpoints=True)
+node_color = [20000.0 * G_symmetric.degree(v) for v in G_symmetric]
+node_size =  [v * 10000 for v in betCent.values()]
+plt.figure(figsize=(10,10))
+nx.draw_networkx(G_symmetric, pos=pos, with_labels=True,
+                 node_color=node_color,
+                 node_size=node_size )
+plt.axis('off');
+
+sorted(betCent, key=betCent.get, reverse=True)[:5]
+>>>
+['Steven', 'Michelle', 'Laura', 'Marc', 'John']
